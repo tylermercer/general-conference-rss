@@ -1,0 +1,7 @@
+{
+  "name": "genconf-rss",
+  "assets": {
+    "directory": "./dist"
+  },
+  "compatibility_date": "2024-12-04"
+}
