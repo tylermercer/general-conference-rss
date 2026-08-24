@@ -3,6 +3,7 @@ layout: '@layouts/Base.astro'
 title: 'General Conference RSS Feed'
 ---
 import LiveReleaseData from '@components/LiveReleaseData.astro';
+import CatchUpLink from '@components/CatchUpLink.astro';
 
 # General Conference RSS Feed
 
@@ -25,5 +26,7 @@ The feed provides direct links and titles to conference talks (English, 2026 onw
 Copy and paste the site URL directly into your RSS reader (autodiscovery will find the feed), or use the direct feed link:
 
 [/rss.xml Direct Feed Link](/rss.xml)
+
+<CatchUpLink />
 
 <LiveReleaseData />

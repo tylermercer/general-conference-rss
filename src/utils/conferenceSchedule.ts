@@ -71,3 +71,45 @@ export function schedulePubDates<T>(talks: T[], conferenceYear: number, conferen
     };
   });
 }
+
+/**
+ * Given talks for the most recent conference in broadcast order, schedules deterministic pubDates evenly across
+ * the catch-up window [startDate, windowEnd).
+ *
+ * windowStart = startDate
+ * windowEnd = next conference Saturday
+ */
+export function scheduleCatchUpPubDates<T>(
+  talks: T[],
+  conferenceYear: number,
+  conferenceMonth: number,
+  startDate: Date
+): ScheduledTalk<T>[] {
+  if (!talks || talks.length === 0) {
+    return [];
+  }
+
+  const windowStart = startDate;
+
+  const nextConf = getNextConference(conferenceYear, conferenceMonth);
+  const nextWeekend = getConferenceWeekend(nextConf.year, nextConf.month);
+  const windowEnd = nextWeekend.saturday;
+
+  const totalDuration = windowEnd.getTime() - windowStart.getTime();
+  if (totalDuration <= 0) {
+    return talks.map((talk) => ({
+      talk,
+      pubDate: new Date(windowStart.getTime()),
+    }));
+  }
+
+  const step = totalDuration / talks.length;
+
+  return talks.map((talk, index) => {
+    const pubDate = new Date(windowStart.getTime() + Math.floor(index * step));
+    return {
+      talk,
+      pubDate,
+    };
+  });
+}
