@@ -1,6 +1,6 @@
 # General Conference RSS Feed
 
-A build-time-generated RSS feed of LDS General Conference talk links, designed to replace broken official feeds.
+A build-time-generated RSS feed of LDS General Conference talk links.
 
 Deploys to Cloudflare Workers via Astro and rebuilds daily using GitHub Actions cron.
 
