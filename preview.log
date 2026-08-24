@@ -2,11 +2,11 @@
 > astro-cloudflare-starter@0.0.1 preview /app
 > astro preview
 
-(node:64944) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(node:31102) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-00:39:15 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
-00:39:15 [@astrojs/cloudflare] If you see the error "Invalid binding `SESSION`" in your build output, you need to add the binding to your wrangler config file.
-00:39:15 [WARN] [adapter] Cloudflare does not support sharp at runtime. However, you can configure `imageService: "compile"` to optimize images with sharp on prerendered pages during build time.
+06:32:35 [@astrojs/cloudflare] Enabling sessions with Cloudflare KV with the "SESSION" KV binding.
+06:32:35 [@astrojs/cloudflare] If you see the error "Invalid binding `SESSION`" in your build output, you need to add the binding to your wrangler config file.
+06:32:35 [WARN] [adapter] Cloudflare does not support sharp at runtime. However, you can configure `imageService: "compile"` to optimize images with sharp on prerendered pages during build time.
 [preview] The @astrojs/cloudflare adapter does not support the preview command.
   Location:
     /app/node_modules/.pnpm/astro@5.18.0_rollup@4.59.0_sass@1.97.3_typescript@5.9.3/node_modules/astro/dist/core/preview/index.js:44:11

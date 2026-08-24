@@ -1,5 +1,6 @@
 // @ts-check
 import cloudflare from "@astrojs/cloudflare";
+import mdx from "@astrojs/mdx";
 import { defineConfig } from 'astro/config';
 import { generateRadixColorsSassFunctions } from "./lib/plugins/sass/radix-ui-colors/generateRadixColorsSassCustomFunction";
 import remarkEmdash from './lib/plugins/remark/emdash.js';
@@ -9,6 +10,7 @@ import rawFonts from './lib/plugins/vite/rawFonts.js';
 export default defineConfig({
   site: 'https://genconf-rss.tmercer.workers.dev',
   adapter: cloudflare({ mode: 'directory' }),
+  integrations: [mdx()],
   markdown: {
     remarkPlugins: [remarkEmdash],
   },

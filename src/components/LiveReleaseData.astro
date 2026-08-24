@@ -1,0 +1,63 @@
+---
+import { getCollection } from 'astro:content';
+import type { ConferenceTalk } from '@utils/fetchConferenceTalks';
+import { schedulePubDates, type ScheduledTalk } from '@utils/conferenceSchedule';
+
+const buildTime = new Date();
+const talkEntries = await getCollection('talks');
+const talks = talkEntries.map((entry) => entry.data);
+
+// Group talks by conference
+const talksByConference = new Map<string, ConferenceTalk[]>();
+for (const talk of talks) {
+  const key = `${talk.conferenceYear}-${talk.conferenceMonth}`;
+  if (!talksByConference.has(key)) {
+    talksByConference.set(key, []);
+  }
+  talksByConference.get(key)!.push(talk);
+}
+
+let latestConferenceLabel = "";
+let releasedCount = 0;
+let totalTalksCount = 0;
+let nextScheduledItem: ScheduledTalk<ConferenceTalk> | null = null;
+
+if (talksByConference.size > 0) {
+  // Get the most recent conference key
+  const keys = Array.from(talksByConference.keys()).sort();
+  const latestKey = keys[keys.length - 1];
+  const [yearStr, monthStr] = latestKey.split('-');
+  const year = parseInt(yearStr, 10);
+  const month = parseInt(monthStr, 10);
+  const monthName = month === 4 ? "April" : "October";
+  latestConferenceLabel = `${monthName} ${year}`;
+
+  const confTalks = talksByConference.get(latestKey)!;
+  totalTalksCount = confTalks.length;
+
+  const scheduled = schedulePubDates(confTalks, year, month);
+  const released = scheduled.filter(item => item.pubDate <= buildTime);
+  releasedCount = released.length;
+
+  const upcoming = scheduled.filter(item => item.pubDate > buildTime);
+  if (upcoming.length > 0) {
+    nextScheduledItem = upcoming[0];
+  }
+}
+---
+
+{latestConferenceLabel && (
+	<section class="l-prose">
+		<h2>Live Release Data ({latestConferenceLabel})</h2>
+		<p>
+			<strong>Released so far:</strong> {releasedCount} of {totalTalksCount} talks released for {latestConferenceLabel}.
+		</p>
+		{nextScheduledItem ? (
+			<p>
+				<strong>Next scheduled release:</strong> "{nextScheduledItem.talk.title}" {nextScheduledItem.talk.speaker ? `by ${nextScheduledItem.talk.speaker}` : ''} on {nextScheduledItem.pubDate.toUTCString()}.
+			</p>
+		) : (
+			<p>All talks for {latestConferenceLabel} have been released!</p>
+		)}
+	</section>
+)}
