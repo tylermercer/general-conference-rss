@@ -19,6 +19,16 @@ const { title = "General Conference RSS Feed" } = Astro.props;
 		<title>{title}</title>
 	</head>
 	<body>
+        <script is:inline>
+			(function () {
+				const stored = localStorage.getItem('theme');
+				if (stored === 'light' || stored === 'dark') {
+					document.documentElement.setAttribute('data-theme', stored);
+				} else {
+					document.documentElement.removeAttribute('data-theme');
+				}
+			})();
+		</script>
 		<header class="u-guttered-lg l-cluster">
 			<div style="flex: 1;"><strong>General Conference Feed</strong></div>
 			<ThemeToggle />
