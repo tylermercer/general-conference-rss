@@ -1,11 +1,13 @@
 import rss from '@astrojs/rss';
 import type { APIRoute } from 'astro';
-import { getEligibleConferenceTalks, type ConferenceTalk } from '../utils/fetchConferenceTalks.js';
+import { getCollection } from 'astro:content';
+import type { ConferenceTalk } from '../utils/fetchConferenceTalks.js';
 import { schedulePubDates, type ScheduledTalk } from '../utils/conferenceSchedule.js';
 
 export const GET: APIRoute = async ({ site }) => {
   const buildTime = new Date();
-  const talks = await getEligibleConferenceTalks(buildTime);
+  const talkEntries = await getCollection('talks');
+  const talks = talkEntries.map((entry) => entry.data);
 
   // Group talks by conference (year & month)
   const talksByConference = new Map<string, ConferenceTalk[]>();
