@@ -23,7 +23,9 @@ const { title = "General Conference RSS Feed" } = Astro.props;
 			<div style="flex: 1;"><strong>General Conference Feed</strong></div>
 			<ThemeToggle />
 		</header>
-		<slot />
+		<main class="l-prose u-guttered">
+			<slot />
+		</main>
 	</body>
 </html>
 
