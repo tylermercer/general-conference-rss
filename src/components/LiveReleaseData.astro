@@ -20,6 +20,7 @@ for (const talk of talks) {
 let latestConferenceLabel = "";
 let releasedCount = 0;
 let totalTalksCount = 0;
+let lastReleasedItem: ScheduledTalk<ConferenceTalk> | null = null;
 let nextScheduledItem: ScheduledTalk<ConferenceTalk> | null = null;
 
 if (talksByConference.size > 0) {
@@ -38,6 +39,9 @@ if (talksByConference.size > 0) {
   const scheduled = schedulePubDates(confTalks, year, month);
   const released = scheduled.filter(item => item.pubDate <= buildTime);
   releasedCount = released.length;
+  if (released.length > 0) {
+    lastReleasedItem = released[released.length - 1];
+  }
 
   const upcoming = scheduled.filter(item => item.pubDate > buildTime);
   if (upcoming.length > 0) {
@@ -50,11 +54,16 @@ if (talksByConference.size > 0) {
 	<section class="l-prose">
 		<h2>Live Release Data ({latestConferenceLabel})</h2>
 		<p>
-			<strong>Released so far:</strong> {releasedCount} of {totalTalksCount} talks released for {latestConferenceLabel}.
+			<strong>Released so far:</strong>{' '}{releasedCount} of {totalTalksCount} talks released for {latestConferenceLabel}.
 		</p>
+		{lastReleasedItem && (
+			<p>
+				<strong>Last released:</strong>{' '}"<a href={lastReleasedItem.talk.url}>{lastReleasedItem.talk.title}</a>" {lastReleasedItem.talk.speaker ? `by ${lastReleasedItem.talk.speaker}` : ''} on {lastReleasedItem.pubDate.toUTCString()}.
+			</p>
+		)}
 		{nextScheduledItem ? (
 			<p>
-				<strong>Next scheduled release:</strong> "{nextScheduledItem.talk.title}" {nextScheduledItem.talk.speaker ? `by ${nextScheduledItem.talk.speaker}` : ''} on {nextScheduledItem.pubDate.toUTCString()}.
+				<strong>Next scheduled release:</strong>{' '}"<a href={nextScheduledItem.talk.url}>{nextScheduledItem.talk.title}</a>" {nextScheduledItem.talk.speaker ? `by ${nextScheduledItem.talk.speaker}` : ''} on {nextScheduledItem.pubDate.toUTCString()}.
 			</p>
 		) : (
 			<p>All talks for {latestConferenceLabel} have been released!</p>
