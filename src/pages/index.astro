@@ -1,10 +1,12 @@
 ---
 import Layout from '@layouts/Base.astro';
-import { getEligibleConferenceTalks, type ConferenceTalk } from '@utils/fetchConferenceTalks';
+import { getCollection } from 'astro:content';
+import type { ConferenceTalk } from '@utils/fetchConferenceTalks';
 import { schedulePubDates, type ScheduledTalk } from '@utils/conferenceSchedule';
 
 const buildTime = new Date();
-const talks = await getEligibleConferenceTalks(buildTime);
+const talkEntries = await getCollection('talks');
+const talks = talkEntries.map((entry) => entry.data);
 
 // Group talks by conference
 const talksByConference = new Map<string, ConferenceTalk[]>();
