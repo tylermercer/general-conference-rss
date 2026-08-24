@@ -3,5 +3,8 @@
   "assets": {
     "directory": "./dist"
   },
-  "compatibility_date": "2024-12-04"
+  "compatibility_date": "2024-12-04",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
 }
