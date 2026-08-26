@@ -5,8 +5,8 @@ name: Build and Deploy to Cloudflare Workers
 # - CLOUDFLARE_ACCOUNT_ID
 
 on:
-  # schedule: # Run at 15:00 UTC every day --- enable if you want to do something like scheduled blog posts
-  #   - cron: "0 15 * * *"
+  schedule: # Run at 15:00 UTC every day --- enable if you want to do something like scheduled blog posts
+    - cron: "0 15 * * *"
   push: # Run on pushes to main
     branches:
       - main
