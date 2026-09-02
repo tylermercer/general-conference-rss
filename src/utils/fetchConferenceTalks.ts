@@ -99,27 +99,43 @@ export async function fetchTalksForConference(year: number, month: number): Prom
       return;
     }
 
-    // Extract title and speaker from paragraphs inside the anchor tag
-    const paragraphs: string[] = [];
-    $(el).find('p').each((_, p) => {
-      const text = $(p).text().trim();
-      if (text) {
-        paragraphs.push(text);
-      }
-    });
+    // Extract title and speaker using specific element selectors first, falling back to paragraphs
+    let title = $(el).find('.title, p.title').text().trim();
+    let speaker = $(el).find('.primaryMeta, p.primaryMeta, .subtitle, p.subtitle').text().trim();
 
-    if (paragraphs.length === 0) {
+    if (!title || !speaker) {
+      const paragraphs: string[] = [];
+      $(el).find('p').each((_, p) => {
+        const text = $(p).text().trim();
+        if (text) {
+          paragraphs.push(text);
+        }
+      });
+
+      if (paragraphs.length > 0) {
+        if (!title && !speaker) {
+          title = paragraphs[0];
+          speaker = paragraphs.length > 1 ? paragraphs[1] : '';
+        } else if (!title) {
+          title = paragraphs.find((p) => p !== speaker) || '';
+        } else if (!speaker) {
+          speaker = paragraphs.find((p) => p !== title) || '';
+        }
+      }
+    }
+
+    if (!title) {
       return;
     }
 
-    const title = paragraphs[0];
-    const speaker = paragraphs.length > 1 ? paragraphs[1] : '';
-
     // Exclude Sustaining of Officers and Church Auditing Department Report
     const lowerTitle = title.toLowerCase();
+    const lowerSpeaker = speaker.toLowerCase();
     if (
       lowerTitle.startsWith('sustaining of') ||
-      lowerTitle.includes('church auditing department report')
+      lowerTitle.includes('church auditing department report') ||
+      lowerSpeaker.startsWith('sustaining of') ||
+      lowerSpeaker.includes('church auditing department report')
     ) {
       return;
     }
